@@ -12,8 +12,9 @@ import { useToast } from '@/context/ToastContext';
 import { MediaLightbox } from '@/components/media/MediaLightbox';
 import { 
   Compass, Calendar, Clock, User, ArrowLeft, Bookmark, 
-  FileText, Database, Image as ImageIcon, Users, CheckCircle2, ChevronRight, PenTool 
+  FileText, Database, Image as ImageIcon, Users, CheckCircle2, ChevronRight, PenTool, Download 
 } from 'lucide-react';
+import { downloadExpeditionReport } from '@/utils/downloadUtils';
 
 export default function ExpeditionDetailPage() {
   const params = useParams();
@@ -41,6 +42,11 @@ export default function ExpeditionDetailPage() {
     (expedition.region === m.region && m.year === expedition.year)
   );
 
+  const handleDownloadReport = () => {
+    const filename = downloadExpeditionReport(expedition, reports);
+    showToast('Report Downloaded', `Downloaded official mission dossier: ${filename}`, 'success');
+  };
+
   return (
     <div className="space-y-12 pb-16">
       
@@ -56,13 +62,23 @@ export default function ExpeditionDetailPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-4">
-          <Link
-            href="/expeditions"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:underline"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to All Expeditions</span>
-          </Link>
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="/expeditions"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:underline"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to All Expeditions</span>
+            </Link>
+
+            <button
+              onClick={handleDownloadReport}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-400 hover:from-sky-400 hover:to-cyan-300 text-slate-950 font-bold text-xs shadow-lg shadow-sky-500/20 transition-all hover:scale-105 active:scale-95"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Download Expedition Report</span>
+            </button>
+          </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-sky-900/80 text-sky-300 border border-sky-400/40">
@@ -324,7 +340,15 @@ export default function ExpeditionDetailPage() {
                 </ul>
               </div>
 
-              <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                <button
+                  onClick={handleDownloadReport}
+                  className="w-full py-2.5 rounded-xl font-bold text-xs bg-sky-600 hover:bg-sky-500 text-white flex items-center justify-center gap-1.5 transition-colors shadow-md shadow-sky-600/20"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Scientific Dossier</span>
+                </button>
+
                 <button
                   onClick={() => {
                     const added = toggleSave('expedition', expedition.id);

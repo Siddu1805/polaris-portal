@@ -9,6 +9,7 @@ import {
 } from '@/data/polaris-data';
 import { useSavedItems } from '@/context/SavedItemsContext';
 import { useToast } from '@/context/ToastContext';
+import { downloadReportItem } from '@/utils/downloadUtils';
 import { MediaLightbox } from '@/components/media/MediaLightbox';
 import { 
   FileText, Download, Share2, Bookmark, Check, ArrowLeft, 
@@ -54,7 +55,8 @@ export default function DocumentDetailPage() {
   };
 
   const handleDownload = () => {
-    showToast('Download Initiated', `Downloading ${report.title} (${report.fileSize}, ${report.fileFormat})`, 'success');
+    const filename = downloadReportItem(report);
+    showToast('Download Complete', `Saved "${filename}" (${report.fileSize})`, 'success');
   };
 
   return (

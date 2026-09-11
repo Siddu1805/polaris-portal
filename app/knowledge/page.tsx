@@ -9,6 +9,7 @@ import {
 import { POLAR_REPORTS, ReportItem } from '@/data/polaris-data';
 import { useSavedItems } from '@/context/SavedItemsContext';
 import { useToast } from '@/context/ToastContext';
+import { downloadReportItem } from '@/utils/downloadUtils';
 
 export default function KnowledgeRepositoryPage() {
   const { isSaved, toggleSave } = useSavedItems();
@@ -50,7 +51,8 @@ export default function KnowledgeRepositoryPage() {
   }, [searchQuery, selectedCategory, selectedRegion, selectedDomain, selectedYear, selectedFormat]);
 
   const handleDownload = (report: ReportItem) => {
-    showToast('Download Started', `Downloading "${report.title}" (${report.fileSize})`, 'success');
+    const filename = downloadReportItem(report);
+    showToast('Download Complete', `Saved "${filename}" (${report.fileSize})`, 'success');
   };
 
   const resetFilters = () => {

@@ -6,6 +6,7 @@ import { POLAR_DATASETS, DatasetItem } from '@/data/polaris-data';
 import { DataHubCharts } from '@/components/charts/DataHubCharts';
 import { useSavedItems } from '@/context/SavedItemsContext';
 import { useToast } from '@/context/ToastContext';
+import { downloadDatasetPackage } from '@/utils/downloadUtils';
 import { 
   Database, Search, Filter, Download, Eye, FileSpreadsheet, 
   Layers, MapPin, Calendar, HardDrive, Bookmark, Check, ArrowRight, X 
@@ -40,7 +41,8 @@ export default function DataHubPage() {
   });
 
   const handleDownload = (ds: DatasetItem) => {
-    showToast('Download Initiated', `Downloading ${ds.title} (${ds.format}, ${ds.size})`, 'success');
+    const filename = downloadDatasetPackage(ds);
+    showToast('Download Complete', `Saved "${filename}" (${ds.format}, ${ds.size})`, 'success');
   };
 
   return (

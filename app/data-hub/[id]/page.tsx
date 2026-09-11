@@ -9,6 +9,7 @@ import {
 import { DatasetTimeSeriesChart } from '@/components/charts/DatasetTimeSeriesChart';
 import { useSavedItems } from '@/context/SavedItemsContext';
 import { useToast } from '@/context/ToastContext';
+import { downloadDatasetPackage } from '@/utils/downloadUtils';
 import { 
   Database, Download, Bookmark, ArrowLeft, Calendar, 
   MapPin, User, FileText, Compass, Copy, Check, PenTool, Layers 
@@ -35,7 +36,8 @@ export default function DatasetDetailPage() {
   );
 
   const handleDownload = () => {
-    showToast('Download Started', `Downloading ${dataset.title} (${dataset.format}, ${dataset.size})`, 'success');
+    const filename = downloadDatasetPackage(dataset);
+    showToast('Download Complete', `Saved "${filename}" (${dataset.format}, ${dataset.size})`, 'success');
   };
 
   const handleCopyCitation = () => {

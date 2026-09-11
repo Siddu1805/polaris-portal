@@ -4,6 +4,7 @@ import React from 'react';
 import { MediaItem } from '@/data/polaris-data';
 import { X, MapPin, Camera, User, Download, Share2, Tag, Calendar, Compass, Shield } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { downloadMediaAsset } from '@/utils/downloadUtils';
 
 interface MediaLightboxProps {
   media: MediaItem | null;
@@ -15,8 +16,10 @@ export function MediaLightbox({ media, onClose }: MediaLightboxProps) {
 
   if (!media) return null;
 
-  const handleDownload = () => {
-    showToast('Download Initiated', `Downloading ${media.title} in high-resolution asset format.`, 'success');
+  const handleDownload = async () => {
+    showToast('Download Started', `Downloading high-res media: ${media.title}`, 'info');
+    const filename = await downloadMediaAsset(media);
+    showToast('Download Complete', `Saved "${filename}"`, 'success');
   };
 
   const handleShare = () => {

@@ -8,6 +8,7 @@ import { Navbar } from '@/components/navigation/Navbar';
 import { Footer } from '@/components/navigation/Footer';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 import { GuidedTourBanner } from '@/components/common/GuidedTourBanner';
+import { ExpeditionAssistant } from '@/components/assistant/ExpeditionAssistant';
 
 export const metadata: Metadata = {
   title: 'POLARIS — Polar Science Knowledge & Outreach Portal',
@@ -33,6 +34,7 @@ export default function RootLayout({
                 </main>
                 <Footer />
                 <MobileBottomNav />
+                <ExpeditionAssistant />
               </SavedItemsProvider>
             </WorkflowProvider>
           </ToastProvider>
