@@ -2,8 +2,10 @@ const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const edge = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const outDir = 'C:\\Users\\Sidharth\\.gemini\\antigravity\\brain\\739dd33c-849f-48a2-968e-a805359b6631\\screenshots';
+const edge = process.env.BROWSER_PATH || (process.platform === 'win32'
+  ? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+  : 'google-chrome');
+const outDir = process.env.SCREENSHOT_OUT_DIR || path.join(__dirname, '../screenshots');
 
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });

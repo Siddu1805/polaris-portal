@@ -1,7 +1,16 @@
 const cp = require('child_process');
 
-const edge = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
-const userProfile = 'C:\\Users\\Sidharth\\.gemini\\antigravity\\scratch\\edge-debug-profile3';
+const fs = require('fs');
+const path = require('path');
+
+const edge = process.env.BROWSER_PATH || (process.platform === 'win32'
+  ? 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+  : 'google-chrome');
+const userProfile = path.join(__dirname, '../.edge-debug-profile');
+
+if (!fs.existsSync(userProfile)) {
+  fs.mkdirSync(userProfile, { recursive: true });
+}
 
 async function run() {
   const edgeProc = cp.spawn(edge, [

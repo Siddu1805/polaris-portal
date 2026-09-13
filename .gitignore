@@ -2,3 +2,7 @@ node_modules/
 .next/
 .env*
 scripts/*.pdf
+scripts/*.png
+screenshots/
+.edge-debug-profile/
+
