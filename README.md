@@ -36,6 +36,22 @@ Polar scientific exploration generates critical insights into global climate sta
 
 ---
 
+## Screenshots
+
+### POLARIS Home
+![POLARIS Home](public/screenshots/home.png)
+
+### Interactive Polar World Explorer
+![Interactive Polar World Explorer](public/screenshots/polar-map.png)
+
+### Polaris Expedition Assistant
+![Polaris Expedition Assistant](public/screenshots/expedition-assistant.png)
+
+### Expedition Explorer
+![Expedition Explorer](public/screenshots/expeditions.png)
+
+---
+
 ## 4. Key Features
 
 - **Interactive Polar Station Map**: Vector-projected polar map with coordinate translation, research base markers, and voyage tracks.

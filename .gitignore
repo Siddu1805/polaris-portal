@@ -38,7 +38,7 @@ pnpm-debug.log*
 # Generated Test PDFs & Screenshots
 scripts/*.pdf
 scripts/*.png
-screenshots/
+/screenshots/
 .edge-debug-profile/
 
 
