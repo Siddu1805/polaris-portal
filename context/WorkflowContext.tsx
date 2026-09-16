@@ -52,6 +52,15 @@ export interface WorkflowItem {
     instagram: boolean;
     youtube: boolean;
   };
+  socialHook?: string;
+  socialCaption?: string;
+  hashtags?: string[];
+  characterCount?: number;
+  suggestedImage?: {
+    url: string;
+    title: string;
+    credit: string;
+  };
 }
 
 interface WorkflowContextType {
@@ -81,7 +90,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
     sourceReportId: 'rep-43-01',
     sourceReportTitle: 'Glaciological Stratigraphy and Mass Balance of Dronning Maud Land Ice Sheet',
     status: 'Published',
-    author: 'Dr. Vikramaditya Sen & POLARIS Science Outreach',
+    author: 'Dr. Vikramaditya Sen & POLARVISION Science Outreach',
     authorRole: 'Chief Glaciologist',
     createdDate: '2024-02-14',
     lastUpdated: '2024-02-28',
@@ -96,7 +105,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
       'Overland traverse spanned 1,800 kilometers over sastrugi terrain'
     ],
     citations: [
-      'Sen, V., et al. (2024). POLARIS Scientific Monographs, 43(1), 1-64.',
+      'Sen, V., et al. (2024). POLARVISION Scientific Monographs, 43(1), 1-64.',
       'POLAR-DAT-2024-001: Central Dronning Maud Land Ice Velocity NetCDF'
     ],
     reviewComments: [
@@ -139,7 +148,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
       'Suppression of winter sea-ice consolidation since 2017'
     ],
     citations: [
-      'Harikrishnan, P., et al. (2024). POLARIS Technical Monographs, 10(4), 1-110.',
+      'Harikrishnan, P., et al. (2024). POLARVISION Technical Monographs, 10(4), 1-110.',
       'IndARC Mooring CTD Archives (POL-DAT-2024-008)'
     ],
     reviewComments: [
@@ -182,7 +191,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
       'Fast-ice underside provides nursery shelter for young krill'
     ],
     citations: [
-      'Sundaram, M., et al. (2023). POLARIS Expedition Series, 12(1), 1-96.',
+      'Sundaram, M., et al. (2023). POLARVISION Expedition Series, 12(1), 1-96.',
       'POL-DAT-2023-010: Acoustic Krill Swarm Survey'
     ],
     reviewComments: [
@@ -203,7 +212,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
     sourceReportId: 'rep-43-11',
     sourceReportTitle: 'Autonomous Clean Energy Microgrid Operations Under Extreme Antarctic Weather',
     status: 'Generated',
-    author: 'POLARIS Content Studio',
+    author: 'POLARVISION Content Studio',
     authorRole: 'Automated Scientific Drafter',
     createdDate: '2024-03-20',
     lastUpdated: '2024-03-20',
@@ -218,7 +227,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
       'Vertical axis turbines tested up to 140 km/h wind gusts'
     ],
     citations: [
-      'Braganza, K., et al. (2024). POLARIS Engineering Reports, 43(3), 1-70.'
+      'Braganza, K., et al. (2024). POLARVISION Engineering Reports, 43(3), 1-70.'
     ],
     reviewComments: []
   },
@@ -245,7 +254,7 @@ const INITIAL_WORKFLOW_ITEMS: WorkflowItem[] = [
       'Potential applications in sustainable low-temperature industrial processes'
     ],
     citations: [
-      'Deshmukh, S., et al. (2024). POLARIS Life Sciences Series, 43(2), 1-58.'
+      'Deshmukh, S., et al. (2024). POLARVISION Life Sciences Series, 43(2), 1-58.'
     ],
     reviewComments: []
   }
@@ -347,13 +356,111 @@ export function WorkflowProvider({ children }: { children: React.ReactNode }) {
     const region = report ? report.region : dataset ? dataset.region : 'Antarctica';
     const authorName = report ? report.author : dataset ? dataset.leadInvestigator : 'Polar Research Team';
 
-    // Simulate realistic generation logic with scientific credibility
+    // 1. Identify optimal real public-domain polar image
+    let suggestedImage = {
+      url: '/images/polar/hero-antarctica.jpg',
+      title: 'Drygalski Ice Tongue & McMurdo Sound, Antarctica',
+      credit: 'NASA Earth Observatory / Public Domain'
+    };
+
+    const textCorpus = `${titleBase} ${domain} ${region}`.toLowerCase();
+    if (textCorpus.includes('maitri') || textCorpus.includes('schirmacher')) {
+      suggestedImage = {
+        url: '/images/polar/maitri-station.jpg',
+        title: 'Aerial View of Maitri Station, Schirmacher Oasis',
+        credit: 'Press Information Bureau / Ministry of Earth Sciences (GODL)'
+      };
+    } else if (textCorpus.includes('bharati') || textCorpus.includes('larsemann')) {
+      suggestedImage = {
+        url: '/images/polar/bharati-station.jpg',
+        title: 'Bharati Permanent Antarctic Station, Larsemann Hills',
+        credit: 'Indian Antarctic Program Documentation (CC BY-SA 4.0)'
+      };
+    } else if (textCorpus.includes('firn') || textCorpus.includes('core') || textCorpus.includes('ice sheet') || textCorpus.includes('glaciol')) {
+      suggestedImage = {
+        url: '/images/polar/ice-core-research.jpg',
+        title: 'Ice Core Drilling Operations, Antarctica',
+        credit: 'U.S. Geological Survey & NSF (Public Domain)'
+      };
+    } else if (textCorpus.includes('arctic') || textCorpus.includes('kongsfjorden') || textCorpus.includes('svalbard') || textCorpus.includes('indarc') || textCorpus.includes('himadri')) {
+      suggestedImage = {
+        url: '/images/polar/arctic-himadri.jpg',
+        title: 'Ny-Ålesund High-Latitude Settlement & Fjord, Svalbard',
+        credit: 'Svalbard Science Archive (CC BY-SA 3.0)'
+      };
+    } else if (textCorpus.includes('southern ocean') || textCorpus.includes('ocean') || textCorpus.includes('krill') || textCorpus.includes('current')) {
+      suggestedImage = {
+        url: '/images/polar/southern-ocean.jpg',
+        title: 'Tabular Iceberg in the Southern Ocean off Elephant Island',
+        credit: 'Polar Marine Research Expedition (CC BY-SA 4.0)'
+      };
+    } else if (textCorpus.includes('vessel') || textCorpus.includes('ship') || textCorpus.includes('icebreaker')) {
+      suggestedImage = {
+        url: '/images/polar/research-vessel.jpg',
+        title: 'Polar Icebreaker Navigating Heavy Pack Ice',
+        credit: 'U.S. Coast Guard & Antarctic Support (Public Domain)'
+      };
+    }
+
+    // 2. Generate dynamic content tailored to content type, audience, and language
     let generatedHeadline = '';
     let generatedSummary = '';
     let generatedContent: string[] = [];
     let generatedKeyFacts: string[] = [];
+    let socialHook = '';
+    let socialCaption = '';
+    let socialHashtags: string[] = [];
 
-    if (language === 'Hindi') {
+    const tagRegion = region.replace(/[^a-zA-Z0-9]/g, '');
+    const tagDomain = domain.replace(/[^a-zA-Z0-9]/g, '');
+    socialHashtags = ['#PolarVision', `#${tagRegion}`, `#${tagDomain}`, '#PolarScience', '#ClimateResearch', '#OpenScience'];
+
+    if (contentType === 'Social Media Post') {
+      if (language === 'Hindi') {
+        if (audience === 'Students') {
+          socialHook = `ध्रुवीय विज्ञान खोज: ${region} में ${domain} पर नया रोमांचक अध्ययन! ❄️🔬`;
+          socialCaption = `क्या आप जानते हैं कि वैज्ञानिक शून्य से नीचे के तापमान में कैसे शोध करते हैं? ${authorName} की टीम ने ${region} से सीधे आंकड़े एकत्र किए हैं, जो हमारी पृथ्वी की बर्फ और मौसम के रहस्यों को उजागर करते हैं। पूरी जानकारी POLARVISION पोर्टल पर देखें!`;
+        } else if (audience === 'Policymakers') {
+          socialHook = `नीति सारांश: ${region} में ${domain} के आधारभूत वैज्ञानिक आंकड़े जारी।`;
+          socialCaption = `${authorName} के नेतृत्व में किए गए नवीनतम शोध से प्राप्त आंकड़े वैश्विक जलवायु नीतियों और तटीय प्रबंधन के लिए निर्णायक हैं। उच्च-सटीक रिपोर्ट POLARVISION ओपन डेटा रिपॉजिटरी पर उपलब्ध है।`;
+        } else {
+          socialHook = `ध्रुवीय विज्ञान खोज: ${region} में ${domain} का नया अध्ययन! 🌍❄️`;
+          socialCaption = `${authorName} और शोध दल द्वारा प्रस्तुत किया गया व्यापक अध्ययन, जो जलवायु परिवर्तन और ध्रुवीय पारिस्थितिकी पर महत्वपूर्ण अंतर्दृष्टि प्रदान करता है। पूरा रिपोर्ट POLARVISION पोर्टल पर पढ़ें!`;
+        }
+      } else {
+        if (audience === 'Students') {
+          socialHook = `Science at the ends of the Earth! 🧊 Discover ${domain} in ${region}.`;
+          socialCaption = `Ever wondered what field research is like at -40°C? A scientific team led by ${authorName} gathered crucial telemetry from ${region}, revealing unexpected dynamics in ${domain}. Dive into the verified dataset on POLARVISION!`;
+        } else if (audience === 'Policymakers') {
+          socialHook = `POLICY BRIEFING: New Empirical Cryospheric Baselines from ${region}.`;
+          socialCaption = `A definitive empirical report led by ${authorName} tracks vital indicators in ${domain} across ${region}. Quantitative findings provide essential benchmark data for global sea-level modeling and polar environmental governance on POLARVISION.`;
+        } else if (audience === 'Researchers') {
+          socialHook = `Field Data Release: ${domain} Observations in ${region} [${report ? report.code : 'Dataset'}].`;
+          socialCaption = `Dr. ${authorName} et al. present continuous telemetry tracking ${domain} parameters in ${region}. Peer-reviewed methodology, calibrated datasets, and full monographs accessible via POLARVISION Open Archive.`;
+        } else if (audience === 'Teachers') {
+          socialHook = `Bring authentic Polar Science into your classroom! 📚❄️ Discover ${domain}.`;
+          socialCaption = `Need real-world empirical examples for your climate science lessons? Explore verified field data from ${region} by ${authorName}. Includes interactive maps, quiz modules, and free reports on POLARVISION!`;
+        } else {
+          socialHook = `Breakthrough in Polar Science: New Observations from ${region}! ❄️🔬`;
+          socialCaption = `How is Earth's polar cryosphere responding to changing planetary temperatures? ${authorName}'s latest research on ${domain} in ${region} delivers groundbreaking field evidence. Read the full scientific report on POLARVISION!`;
+        }
+      }
+
+      generatedHeadline = socialHook;
+      generatedSummary = socialCaption;
+      generatedContent = [
+        socialCaption,
+        `Key Scientific Markers:\n• Observed parameter: ${domain}\n• Target field zone: ${region}\n• Principal investigator: ${authorName}`,
+        `Traceable Source: ${titleBase} | Citations and data packages available on POLARVISION.`
+      ];
+      generatedKeyFacts = report && report.keyFindings && report.keyFindings.length > 0
+        ? report.keyFindings.slice(0, 3)
+        : [
+            `Empirical observations anchored in ${region} polar research infrastructure`,
+            `High-precision telemetry led by ${authorName}`,
+            `Verified open-access data and DOI citation indexed on POLARVISION`
+          ];
+    } else if (language === 'Hindi') {
       generatedHeadline = `ध्रुवीय विज्ञान खोज: ${region} में ${domain} का नया अध्ययन`;
       generatedSummary = `${authorName} और शोध दल द्वारा प्रस्तुत किया गया व्यापक वैज्ञानिक अध्ययन, जो जलवायु परिवर्तन और ध्रुवीय पारिस्थितिकी पर महत्वपूर्ण अंतर्दृष्टि प्रदान करता है।`;
       generatedContent = [
@@ -377,18 +484,6 @@ export function WorkflowProvider({ children }: { children: React.ReactNode }) {
           `Field observation anchored in ${region} polar research infrastructure`,
           `Empirical data verified against historical baselines and satellite measurements`,
           `Directly informs coupled Earth system models and sea level forecasting`
-        ];
-      } else if (contentType === 'Social Media Post') {
-        generatedHeadline = `Breakthrough in Polar Science: New Observations from ${region}! ❄️🔬`;
-        generatedSummary = `Key takeaways from ${authorName}'s latest research on ${domain} in ${region}.`;
-        generatedContent = [
-          `How is ${region} responding to changing planetary dynamics? 🌍 Discover the latest findings from ${authorName} on ${domain}!`,
-          `Through rigorous field campaigns, scientists mapped critical parameters showing how polar systems act as early warning indicators for global climate shifts. Read the full scientific report on POLARIS! #PolarScience #${region.replace(/\s+/g, '')} #ClimateResearch`
-        ];
-        generatedKeyFacts = [
-          `New data released by ${authorName}`,
-          `Focuses on ${domain} dynamics in ${region}`,
-          `Full report & open datasets accessible on POLARIS`
         ];
       } else if (contentType === 'Press Brief') {
         generatedHeadline = `SCIENTIFIC BRIEFING: New Research on ${domain} in ${region}`;
@@ -418,9 +513,11 @@ export function WorkflowProvider({ children }: { children: React.ReactNode }) {
     }
 
     const citations = [
-      report ? report.citation : dataset ? dataset.citation : `POLARIS Polar Science Archive: ${titleBase}`,
-      `Verified via POLARIS Knowledge Repository (ID: ${sourceId})`
+      report ? report.citation : dataset ? dataset.citation : `POLARVISION Polar Science Archive: ${titleBase}`,
+      `Verified via POLARVISION Knowledge Repository (ID: ${sourceId})`
     ];
+
+    const characterCount = (socialHook + ' ' + socialCaption + ' ' + socialHashtags.join(' ')).length;
 
     const newItem: WorkflowItem = {
       id: 'wf-' + Math.random().toString(36).substring(2, 8),
@@ -439,7 +536,12 @@ export function WorkflowProvider({ children }: { children: React.ReactNode }) {
       content: generatedContent,
       keyFacts: generatedKeyFacts,
       citations,
-      reviewComments: []
+      reviewComments: [],
+      socialHook,
+      socialCaption,
+      hashtags: socialHashtags,
+      characterCount,
+      suggestedImage
     };
 
     persistItems([newItem, ...items]);

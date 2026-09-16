@@ -11,7 +11,7 @@ import { GuidedTourBanner } from '@/components/common/GuidedTourBanner';
 import { ExpeditionAssistant } from '@/components/assistant/ExpeditionAssistant';
 
 export const metadata: Metadata = {
-  title: 'POLARIS — Polar Science Knowledge & Outreach Portal',
+  title: 'POLARVISION — Polar Science Knowledge & Outreach Portal',
   description: 'A unified digital experience for discovering polar science, research expeditions, scientific datasets, publications, photographs, videos, researchers, educational resources, and science communication content.',
 };
 

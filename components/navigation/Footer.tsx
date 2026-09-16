@@ -16,7 +16,7 @@ export function Footer() {
                 ✦
               </div>
               <span className="font-extrabold text-xl tracking-wider text-slate-900 dark:text-white">
-                POLARIS
+                POLARVISION
               </span>
             </Link>
             <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm leading-relaxed">
@@ -60,27 +60,35 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Platform */}
+          {/* Station Directory */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-              Platform
+              Polar Stations
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><Link href="/studio" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Content Studio</Link></li>
-              <li><Link href="/studio/workflow" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Editorial Review</Link></li>
-              <li><Link href="/studio/distribute" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Media Dissemination</Link></li>
-              <li><Link href="/admin" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Repository Admin</Link></li>
-              <li><Link href="/profile" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">Researcher Profile</Link></li>
+              <li><span className="text-slate-400">Bharati Station</span> <span className="text-[10px] text-sky-500 font-mono">(69°S, Larsemann Hills)</span></li>
+              <li><span className="text-slate-400">Maitri Station</span> <span className="text-[10px] text-sky-500 font-mono">(70°S, Schirmacher Oasis)</span></li>
+              <li><span className="text-slate-400">Himadri Station</span> <span className="text-[10px] text-sky-500 font-mono">(78°N, Ny-Ålesund, Arctic)</span></li>
+              <li><span className="text-slate-400">IndARC Observatory</span> <span className="text-[10px] text-sky-500 font-mono">(Kongsfjorden Mooring)</span></li>
+              <li><span className="text-slate-400">Dakshin Gangotri</span> <span className="text-[10px] text-amber-500 font-mono">(Historical Base, 1983)</span></li>
             </ul>
           </div>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-          <p>© {new Date().getFullYear()} POLARIS. Dedicated to Open Polar Science, Knowledge & Outreach.</p>
-          <div className="flex items-center gap-6">
-            <span className="text-[11px] text-slate-400">Open Access • High-Latitude Research Repository</span>
+        {/* Institutional Credits & Bottom Bar */}
+        <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+          <div>
+            <p className="font-semibold text-slate-700 dark:text-slate-300">
+              POLARVISION — Polar Science Knowledge & Outreach Portal
+            </p>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Developed in alignment with Indian Polar Science Programmes (National Centre for Polar and Ocean Research - NCPOR, Ministry of Earth Sciences).
+            </p>
+          </div>
+          <div className="text-right">
+            <p>© {new Date().getFullYear()} POLARVISION. Open-Access Polar Science & Education Repository.</p>
+            <p className="text-[11px] text-slate-400">All data & publications indexed under CC BY 4.0 / Public Domain.</p>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function DataHubPage() {
 
   const handleDownload = (ds: DatasetItem) => {
     const filename = downloadDatasetPackage(ds);
-    showToast('Download Complete', `Saved "${filename}" (${ds.format}, ${ds.size})`, 'success');
+    showToast('Report downloaded successfully', `Saved dataset package: "${filename}"`, 'success');
   };
 
   return (
@@ -218,7 +218,12 @@ export default function DataHubPage() {
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDownload(ds)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDownload(ds);
+                          }}
                           className="p-1.5 text-slate-500 hover:text-emerald-500 rounded-lg"
                           title="Download Dataset"
                         >
@@ -360,7 +365,11 @@ export default function DataHubPage() {
                 Open Full Interactive Analytics →
               </Link>
               <button
-                onClick={() => handleDownload(activeMetadataModal)}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDownload(activeMetadataModal);
+                }}
                 className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold"
               >
                 Download Package ({activeMetadataModal.size})

@@ -36,7 +36,7 @@ export async function processAssistantQuery(
     return {
       id,
       role: 'assistant',
-      content: `Hello! I am your **Polaris Expedition Assistant**. I can help you explore 40+ years of high-latitude scientific campaigns, research expeditions, field findings, and verified mission reports across Antarctica, the Arctic, and the Southern Ocean.\n\nTry asking me about specific voyages, scientific topics like *sea ice* or *glaciology*, or ask for downloadable expedition reports!`,
+      content: `Hello! I am your **PolarVision Expedition Assistant**. I can help you explore 40+ years of high-latitude scientific campaigns, research expeditions, field findings, and verified mission reports across Antarctica, the Arctic, and the Southern Ocean.\n\nTry asking me about specific voyages, scientific topics like *sea ice* or *glaciology*, or ask for downloadable expedition reports!`,
       timestamp,
       suggestedActions: [
         'Tell me about 43rd Antarctic Expedition',
@@ -55,7 +55,7 @@ export async function processAssistantQuery(
     return {
       id,
       role: 'assistant',
-      content: `**MOSAiC** (*Multidisciplinary drifting Observatory for the Study of Arctic Climate*) was a landmark international Arctic ice-drift expedition (2019–2020) led by Germany's Alfred Wegener Institute aboard the icebreaker *RV Polarstern*.\n\nWhile international missions like MOSAiC are not directly indexed in this portal's national polar registry, POLARIS maintains our dedicated high-latitude **Arctic campaigns** operating from the **Himadri Station** and **IndARC Moored Observatory** in Ny-Ålesund, Svalbard:\n\n• **ARCTIC-24 (2024)**: Summer expedition studying rapid glacier retreat and oceanic influx in Kongsfjorden.\n• **ARCTIC-23 (2023)**: Winter precursor campaign tracking atmospheric black carbon transport.\n\nWould you like to review findings or download reports from our Arctic expeditions?`,
+      content: `**MOSAiC** (*Multidisciplinary drifting Observatory for the Study of Arctic Climate*) was a landmark international Arctic ice-drift expedition (2019–2020) led by Germany's Alfred Wegener Institute aboard the icebreaker *RV Polarstern*.\n\nWhile international missions like MOSAiC are not directly indexed in this portal's national polar registry, POLARVISION maintains our dedicated high-latitude **Arctic campaigns** operating from the **Himadri Station** and **IndARC Moored Observatory** in Ny-Ålesund, Svalbard:\n\n• **ARCTIC-24 (2024)**: Summer expedition studying rapid glacier retreat and oceanic influx in Kongsfjorden.\n• **ARCTIC-23 (2023)**: Winter precursor campaign tracking atmospheric black carbon transport.\n\nWould you like to review findings or download reports from our Arctic expeditions?`,
       timestamp,
       expeditions: arcticExpeditions,
       suggestedActions: [

@@ -40,5 +40,6 @@ scripts/*.pdf
 scripts/*.png
 /screenshots/
 .edge-debug-profile/
+.edge-debug-profile*/
 
 

@@ -14,6 +14,12 @@ export function PolarMap() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
+  const [showStations, setShowStations] = useState(true);
+  const [showRoutes, setShowRoutes] = useState(true);
+  const [showBuoys, setShowBuoys] = useState(true);
+  const [showIceShelves, setShowIceShelves] = useState(true);
+  const [selectedFeature, setSelectedFeature] = useState<{ title: string; category: string; coords: string; details: string } | null>(null);
+
   useEffect(() => {
     setMapLoaded(true);
   }, []);
@@ -23,12 +29,21 @@ export function PolarMap() {
     return st.region === activeRegionFilter;
   });
 
+  const buoys = [
+    { id: 'buoy-so-01', name: 'Southern Ocean Bio-Argo Float #5906421', lat: -58.4, lng: 45.2, region: 'Southern Ocean', type: 'Bio-Argo Profiler', status: 'Active (Depth 2,000m)' },
+    { id: 'buoy-arc-02', name: 'Kongsfjorden Subsurface Mooring IndARC-M2', lat: 79.0, lng: 11.8, region: 'Arctic', type: 'Acoustic & Salinity Mooring', status: 'Continuous Telemetry' },
+    { id: 'buoy-ant-03', name: 'Prydz Bay Continental Shelf Hydrographic Array', lat: -68.5, lng: 75.8, region: 'Antarctica', type: 'MetOcean Cryo-Buoy', status: 'Continuous Telemetry' }
+  ].filter(b => activeRegionFilter === 'All' || b.region === activeRegionFilter);
+
+  const iceShelves = [
+    { id: 'shelf-amery', name: 'Amery Ice Shelf', lat: -69.8, lng: 72.5, region: 'Antarctica', area: '60,000 km²', thickness: '400-800m' },
+    { id: 'shelf-ross', name: 'Ross Ice Shelf', lat: -81.5, lng: -175.0, region: 'Antarctica', area: '487,000 km²', thickness: '200-700m' },
+    { id: 'shelf-larsen', name: 'Larsen C Ice Shelf', lat: -67.5, lng: -62.5, region: 'Antarctica', area: '44,200 km²', thickness: '200-350m' }
+  ].filter(s => activeRegionFilter === 'All' || s.region === activeRegionFilter);
+
   // Calculate pixel coordinates for polar stereographic projection projection / equirectangular canvas
   // Input: [lat, lng], Output: { x, y } in percentage [0..100]
   const projectCoords = (lat: number, lng: number) => {
-    // Equirectangular mapping:
-    // x: (-180 to 180) -> (0 to 100%)
-    // y: (90 to -90) -> (0 to 100%)
     const x = ((lng + 180) / 360) * 100;
     const y = ((90 - lat) / 180) * 100;
     return { x, y };
@@ -123,29 +138,76 @@ export function PolarMap() {
           ))}
         </div>
 
-        {/* Map Control Buttons */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-900/90 backdrop-blur-md rounded-xl border border-sky-500/30 pointer-events-auto shadow-lg">
-          <button
-            onClick={handleZoomIn}
-            className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
-            title="Zoom in"
-          >
-            <ZoomIn className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleZoomOut}
-            className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
-            title="Zoom out"
-          >
-            <ZoomOut className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleReset}
-            className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
-            title="Reset map perspective"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
+        {/* Layer Toggles & Map Control Buttons */}
+        <div className="flex items-center gap-2 flex-wrap pointer-events-auto">
+          {/* Layer Toggles */}
+          <div className="flex items-center gap-1 p-1 bg-slate-900/90 backdrop-blur-md rounded-xl border border-sky-500/30 shadow-lg text-[11px]">
+            <button
+              onClick={() => setShowStations(!showStations)}
+              className={`px-2.5 py-1 rounded-lg transition-colors font-medium flex items-center gap-1 ${
+                showStations ? 'bg-sky-500/30 text-sky-300 border border-sky-400/40' : 'text-slate-400 hover:text-white'
+              }`}
+              title="Toggle Research Stations"
+            >
+              <MapPin className="w-3 h-3" />
+              <span className="hidden sm:inline">Stations</span>
+            </button>
+            <button
+              onClick={() => setShowRoutes(!showRoutes)}
+              className={`px-2.5 py-1 rounded-lg transition-colors font-medium flex items-center gap-1 ${
+                showRoutes ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-400/40' : 'text-slate-400 hover:text-white'
+              }`}
+              title="Toggle Expedition Routes"
+            >
+              <Navigation className="w-3 h-3" />
+              <span className="hidden sm:inline">Routes</span>
+            </button>
+            <button
+              onClick={() => setShowBuoys(!showBuoys)}
+              className={`px-2.5 py-1 rounded-lg transition-colors font-medium flex items-center gap-1 ${
+                showBuoys ? 'bg-amber-500/30 text-amber-300 border border-amber-400/40' : 'text-slate-400 hover:text-white'
+              }`}
+              title="Toggle Data Buoys"
+            >
+              <span className="w-2 h-2 rounded-full bg-amber-400" />
+              <span className="hidden sm:inline">Buoys</span>
+            </button>
+            <button
+              onClick={() => setShowIceShelves(!showIceShelves)}
+              className={`px-2.5 py-1 rounded-lg transition-colors font-medium flex items-center gap-1 ${
+                showIceShelves ? 'bg-indigo-500/30 text-indigo-300 border border-indigo-400/40' : 'text-slate-400 hover:text-white'
+              }`}
+              title="Toggle Ice Shelves"
+            >
+              <Layers className="w-3 h-3" />
+              <span className="hidden sm:inline">Ice Shelves</span>
+            </button>
+          </div>
+
+          {/* Zoom controls */}
+          <div className="flex items-center gap-1 p-1 bg-slate-900/90 backdrop-blur-md rounded-xl border border-sky-500/30 shadow-lg">
+            <button
+              onClick={handleZoomIn}
+              className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
+              title="Zoom in"
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleZoomOut}
+              className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
+              title="Zoom out"
+            >
+              <ZoomOut className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleReset}
+              className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
+              title="Reset map perspective"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -190,7 +252,7 @@ export function PolarMap() {
             <text x="12" y="86%" fill="#38bdf8" fontSize="10" fontFamily="monospace" opacity="0.6">ANTARCTIC CIRCLE (66.5° S)</text>
 
             {/* Expedition Route Polyline Overlays */}
-            {routes.map((route, idx) => {
+            {showRoutes && routes.map((route, idx) => {
               const points = route.path
                 .map((pt) => {
                   const p = projectCoords(pt.lat, pt.lng);
@@ -221,8 +283,64 @@ export function PolarMap() {
             <div className="absolute bottom-2 left-1/4 right-1/4 h-36 rounded-full bg-cyan-500/25 blur-3xl" />
           </div>
 
+          {/* Ice Shelf Overlays */}
+          {showIceShelves && iceShelves.map((shelf) => {
+            const pos = projectCoords(shelf.lat, shelf.lng);
+            return (
+              <div
+                key={shelf.id}
+                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 z-25 cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedFeature({
+                    title: shelf.name,
+                    category: 'Glacial Ice Shelf',
+                    coords: `${shelf.lat}°, ${shelf.lng}°`,
+                    details: `Area: ${shelf.area} • Thickness: ${shelf.thickness} • Region: ${shelf.region}`
+                  });
+                }}
+              >
+                <div className="px-2 py-1 rounded-md bg-indigo-950/80 border border-indigo-400/40 text-[10px] text-indigo-300 font-medium whitespace-nowrap shadow-md group-hover:scale-110 transition-transform">
+                  ❄ {shelf.name}
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Data Buoy Markers */}
+          {showBuoys && buoys.map((buoy) => {
+            const pos = projectCoords(buoy.lat, buoy.lng);
+            return (
+              <div
+                key={buoy.id}
+                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                className="absolute transform -translate-x-1/2 -translate-y-1/2 z-28 cursor-pointer group"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedFeature({
+                    title: buoy.name,
+                    category: buoy.type,
+                    coords: `${buoy.lat}°, ${buoy.lng}°`,
+                    details: `Status: ${buoy.status} • Region: ${buoy.region}`
+                  });
+                }}
+              >
+                <span className="absolute -inset-1.5 rounded-full bg-amber-400/40 animate-ping" />
+                <div className="w-5 h-5 rounded-full bg-amber-500 border border-white flex items-center justify-center text-white shadow-md text-[9px] font-bold group-hover:scale-125 transition-transform">
+                  ◉
+                </div>
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-40">
+                  <div className="bg-slate-900/95 border border-amber-400/40 text-white px-2 py-0.5 rounded text-[10px] shadow-lg">
+                    {buoy.name}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
           {/* Station Markers */}
-          {filteredStations.map((station) => {
+          {showStations && filteredStations.map((station) => {
             const pos = projectCoords(station.coordinates[0], station.coordinates[1]);
             const isSelected = selectedStation?.id === station.id;
 
@@ -263,6 +381,28 @@ export function PolarMap() {
             );
           })}
         </div>
+
+        {/* Selected Feature Floating Notification (Buoy / Ice Shelf) */}
+        {selectedFeature && (
+          <div className="absolute top-16 left-4 z-40 bg-slate-900/95 border border-sky-400/40 p-3.5 rounded-xl shadow-2xl max-w-sm backdrop-blur-md animate-fade-in">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400 font-mono">
+                  {selectedFeature.category}
+                </span>
+                <h4 className="text-xs font-bold text-white mt-0.5">{selectedFeature.title}</h4>
+                <p className="text-[11px] text-slate-400 mt-1 font-mono">{selectedFeature.coords}</p>
+                <p className="text-[11px] text-slate-300 mt-1.5 leading-relaxed">{selectedFeature.details}</p>
+              </div>
+              <button
+                onClick={() => setSelectedFeature(null)}
+                className="text-slate-400 hover:text-white text-xs font-bold px-1.5 py-0.5 rounded hover:bg-slate-800"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Legend / Status Telemetry Bar */}
         <div className="absolute bottom-4 left-4 right-4 z-20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 rounded-xl bg-slate-900/85 backdrop-blur-md border border-sky-500/20 text-xs text-slate-300 shadow-xl pointer-events-auto">

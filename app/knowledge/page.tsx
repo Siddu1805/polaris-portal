@@ -52,7 +52,7 @@ export default function KnowledgeRepositoryPage() {
 
   const handleDownload = (report: ReportItem) => {
     const filename = downloadReportItem(report);
-    showToast('Download Complete', `Saved "${filename}" (${report.fileSize})`, 'success');
+    showToast('Report downloaded successfully', `Saved "${filename}"`, 'success');
   };
 
   const resetFilters = () => {
@@ -339,7 +339,12 @@ export default function KnowledgeRepositoryPage() {
                           <span className="hidden sm:inline">Story Studio</span>
                         </Link>
                         <button
-                          onClick={() => handleDownload(report)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDownload(report);
+                          }}
                           className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-sky-500 rounded-lg text-[11px] font-semibold flex items-center gap-1"
                           title="Download report"
                         >
@@ -393,8 +398,14 @@ export default function KnowledgeRepositoryPage() {
                       Studio
                     </Link>
                     <button
-                      onClick={() => handleDownload(report)}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDownload(report);
+                      }}
                       className="p-2 text-slate-500 hover:text-sky-500"
+                      title="Download report"
                     >
                       <Download className="w-4 h-4" />
                     </button>

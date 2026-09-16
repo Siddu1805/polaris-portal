@@ -14,7 +14,7 @@ export default function ExpeditionsPage() {
   const handleDownload = (exp: Expedition) => {
     const reps = POLAR_REPORTS.filter((r) => r.expeditionId === exp.id);
     const filename = downloadExpeditionReport(exp, reps);
-    showToast('Report Downloaded', `Downloaded dossier: ${filename}`, 'success');
+    showToast('Report downloaded successfully', `Saved: ${filename}`, 'success');
   };
 
   const filtered = POLAR_EXPEDITIONS.filter((exp) => {
@@ -147,7 +147,12 @@ export default function ExpeditionsPage() {
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
               <button
-                onClick={() => handleDownload(exp)}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDownload(exp);
+                }}
                 title={`Download ${exp.code} Report`}
                 className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-sky-600 hover:text-white dark:hover:bg-sky-600 text-slate-600 dark:text-slate-300 transition-colors"
               >

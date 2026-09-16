@@ -25,7 +25,7 @@ export function ExpeditionAssistant() {
     {
       id: 'init-msg',
       role: 'assistant',
-      content: `Welcome to the **Polaris Expedition Assistant**! I can instantly look up scientific expeditions, research objectives, polar station telemetry, and provide verified mission reports.\n\nWhat would you like to explore today?`,
+      content: `Welcome to the **PolarVision Expedition Assistant**! I can instantly look up scientific expeditions, research objectives, polar station telemetry, and provide verified mission reports.\n\nWhat would you like to explore today?`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestedActions: [
         'Tell me about 43rd Antarctic Expedition',
@@ -97,8 +97,8 @@ export function ExpeditionAssistant() {
     const associatedReports = POLAR_REPORTS.filter((r) => r.expeditionId === exp.id);
     const filename = downloadExpeditionReport(exp, associatedReports);
     showToast(
-      'Expedition Report Downloaded',
-      `Downloaded dossier: ${filename} with ${associatedReports.length} linked report(s).`,
+      'Report downloaded successfully',
+      `Saved: ${filename}`,
       'success'
     );
   };
@@ -126,8 +126,9 @@ export function ExpeditionAssistant() {
       <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50">
         {!isOpen && (
           <button
+            type="button"
             onClick={() => setIsOpen(true)}
-            aria-label="Open Polaris Expedition Assistant"
+            aria-label="Open PolarVision Expedition Assistant"
             className="group relative flex items-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-400 hover:from-sky-500 hover:to-cyan-300 text-slate-950 font-bold text-xs sm:text-sm shadow-2xl shadow-sky-500/40 hover:shadow-sky-400/50 hover:scale-105 active:scale-95 transition-all duration-300 border border-white/25"
           >
             {/* Animated Pulsing Radar Beacon */}
@@ -137,7 +138,7 @@ export function ExpeditionAssistant() {
             </span>
 
             <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950 animate-spin-slow" />
-            <span className="font-extrabold tracking-wide">Expedition Assistant</span>
+            <span className="font-extrabold tracking-wide">PolarVision Assistant</span>
 
             {/* Subtle Tooltip Pill */}
             <span className="absolute -top-9 right-0 bg-slate-900 text-sky-300 text-[10px] font-mono px-2.5 py-1 rounded-md border border-sky-500/30 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">
@@ -151,7 +152,7 @@ export function ExpeditionAssistant() {
       {isOpen && (
         <div 
           role="dialog"
-          aria-label="Polaris Expedition Assistant Chat Window"
+          aria-label="PolarVision Expedition Assistant Chat Window"
           className="fixed inset-x-3 bottom-20 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[430px] h-[580px] max-h-[82vh] z-50 flex flex-col rounded-2xl sm:rounded-3xl bg-slate-950/95 border border-sky-500/40 shadow-2xl backdrop-blur-xl overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-300"
         >
           {/* Header */}
@@ -162,7 +163,7 @@ export function ExpeditionAssistant() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-black text-sm text-white tracking-wide">Polaris Assistant</h3>
+                  <h3 className="font-black text-sm text-white tracking-wide">PolarVision Assistant</h3>
                   <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     Online
@@ -204,7 +205,7 @@ export function ExpeditionAssistant() {
                 >
                   {/* Sender Tag & Timestamp */}
                   <span className="text-[10px] text-slate-500 mb-1 px-1">
-                    {isAssistant ? '✦ Polaris Expedition Assistant' : 'You'} • {msg.timestamp}
+                    {isAssistant ? '✦ PolarVision Expedition Assistant' : 'You'} • {msg.timestamp}
                   </span>
 
                   {/* Message Bubble */}
@@ -265,7 +266,12 @@ export function ExpeditionAssistant() {
                         <div className="pt-2 flex flex-wrap items-center gap-2 border-t border-slate-800">
                           {msg.showDownloadButton && (
                             <button
-                              onClick={() => handleDownload(msg.selectedExpedition!)}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleDownload(msg.selectedExpedition!);
+                              }}
                               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-[11px] transition-transform active:scale-95 shadow-sm"
                             >
                               <Download className="w-3 h-3" />
@@ -315,7 +321,12 @@ export function ExpeditionAssistant() {
                                 Details
                               </button>
                               <button
-                                onClick={() => handleDownload(exp)}
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleDownload(exp);
+                                }}
                                 title="Download Report"
                                 className="p-1 rounded bg-sky-950 hover:bg-sky-800 text-sky-300 border border-sky-400/30 transition-colors"
                               >
@@ -350,7 +361,7 @@ export function ExpeditionAssistant() {
             {isLoading && (
               <div className="flex flex-col items-start">
                 <span className="text-[10px] text-slate-500 mb-1 px-1">
-                  ✦ Polaris Expedition Assistant
+                  ✦ PolarVision Expedition Assistant
                 </span>
                 <div className="rounded-2xl px-4 py-3 bg-slate-900 border border-sky-500/20 text-sky-300 flex items-center gap-2 text-xs">
                   <div className="flex items-center gap-1">
@@ -397,7 +408,7 @@ export function ExpeditionAssistant() {
             </form>
             <div className="mt-1.5 flex items-center justify-between text-[10px] text-slate-500 px-1">
               <span>Local Expedition NLU Engine</span>
-              <span>Polaris Portal v2.0</span>
+              <span>PolarVision Portal</span>
             </div>
           </div>
         </div>

@@ -55,7 +55,7 @@ export function PlatformPreviews() {
         };
       }
       case 'linkedin': {
-        const text = `🔬 Breakthrough in Polar Exploration & Climate Science\n\n${summary}\n\nOur scientific investigation, documented in "${source}", demonstrates vital new observations for high-latitude modeling.\n\nKey Takeaways:\n${selectedItem.keyFacts.map(f => `✓ ${f}`).join('\n')}\n\nCitation: ${selectedItem.citations[0] || source}\n\nExplore the open dataset and full voyage report on POLARIS.`;
+        const text = `🔬 Breakthrough in Polar Exploration & Climate Science\n\n${summary}\n\nOur scientific investigation, documented in "${source}", demonstrates vital new observations for high-latitude modeling.\n\nKey Takeaways:\n${selectedItem.keyFacts.map(f => `✓ ${f}`).join('\n')}\n\nCitation: ${selectedItem.citations[0] || source}\n\nExplore the open dataset and full voyage report on POLARVISION.`;
         const hashtags = ['#PolarResearch', '#ClimateScience', '#Glaciology', '#Oceanography', '#DataDrivenScience'];
         return {
           text,
@@ -65,7 +65,7 @@ export function PlatformPreviews() {
         };
       }
       case 'twitter': {
-        const text = `❄️ New polar research alert!\n\n${summary.slice(0, 160)}...\n\nLed by ${author}, this analysis provides critical indicators on polar climate stability.\n\nRead the full report on POLARIS 👇`;
+        const text = `❄️ New polar research alert!\n\n${summary.slice(0, 160)}...\n\nLed by ${author}, this analysis provides critical indicators on polar climate stability.\n\nRead the full report on POLARVISION 👇`;
         const hashtags = ['#Antarctica', '#ArcticScience', '#ClimateChange'];
         return {
           text,
@@ -75,8 +75,8 @@ export function PlatformPreviews() {
         };
       }
       case 'instagram': {
-        const text = `Into the Frozen Frontiers ❄️✨\n\n${summary}\n\nSwipe across to discover the raw empirical data gathered in the field by ${author}.\n\nEvery ice core and deep-sea cast tells a story of planetary balance.\n\nLink in bio to read the open report on POLARIS Portal 🌐`;
-        const hashtags = ['#PolarisScience', '#AntarcticLife', '#PolarExploration', '#GlacierLove', '#ScienceOutreach', '#ExtremeFieldwork'];
+        const text = `Into the Frozen Frontiers ❄️✨\n\n${summary}\n\nSwipe across to discover the raw empirical data gathered in the field by ${author}.\n\nEvery ice core and deep-sea cast tells a story of planetary balance.\n\nLink in bio to read the open report on POLARVISION Portal 🌐`;
+        const hashtags = ['#PolarVisionScience', '#AntarcticLife', '#PolarExploration', '#GlacierLove', '#ScienceOutreach', '#ExtremeFieldwork'];
         return {
           text,
           hashtags,
@@ -85,7 +85,7 @@ export function PlatformPreviews() {
         };
       }
       case 'youtube': {
-        const text = `VIDEO SCRIPT / COMMUNITY POST:\n\n[HOOK]: What does an 800,000-year-old ice core sound like when it melts?\n\n[OVERVIEW]: Welcome back to POLARIS Science. Today, we're diving into ${source}.\n\n[KEY FACTS TO DISCUSS]:\n${selectedItem.keyFacts.map((f, i) => `${i + 1}. ${f}`).join('\n')}\n\n[CITATION & DATA]: All datasets referenced are available for free download at polaris-science.org`;
+        const text = `VIDEO SCRIPT / COMMUNITY POST:\n\n[HOOK]: What does an 800,000-year-old ice core sound like when it melts?\n\n[OVERVIEW]: Welcome back to POLARVISION Science. Today, we're diving into ${source}.\n\n[KEY FACTS TO DISCUSS]:\n${selectedItem.keyFacts.map((f, i) => `${i + 1}. ${f}`).join('\n')}\n\n[CITATION & DATA]: All datasets referenced are available for free download at polarvision.science`;
         const hashtags = ['#ScienceDocumentary', '#PolarExpedition', '#ClimateExplained', '#Shorts'];
         return {
           text,
@@ -169,7 +169,7 @@ export function PlatformPreviews() {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                    POLARIS Science Communication
+                    POLARVISION Science Communication
                   </h4>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
                     Platform Channel: <strong>{platforms.find(p => p.id === activePlatform)?.label}</strong>

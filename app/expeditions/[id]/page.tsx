@@ -44,7 +44,7 @@ export default function ExpeditionDetailPage() {
 
   const handleDownloadReport = () => {
     const filename = downloadExpeditionReport(expedition, reports);
-    showToast('Report Downloaded', `Downloaded official mission dossier: ${filename}`, 'success');
+    showToast('Report downloaded successfully', `Saved: ${filename}`, 'success');
   };
 
   return (
@@ -72,7 +72,11 @@ export default function ExpeditionDetailPage() {
             </Link>
 
             <button
-              onClick={handleDownloadReport}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDownloadReport();
+              }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-400 hover:from-sky-400 hover:to-cyan-300 text-slate-950 font-bold text-xs shadow-lg shadow-sky-500/20 transition-all hover:scale-105 active:scale-95"
             >
               <Download className="w-3.5 h-3.5" />
@@ -342,7 +346,11 @@ export default function ExpeditionDetailPage() {
 
               <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2">
                 <button
-                  onClick={handleDownloadReport}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDownloadReport();
+                  }}
                   className="w-full py-2.5 rounded-xl font-bold text-xs bg-sky-600 hover:bg-sky-500 text-white flex items-center justify-center gap-1.5 transition-colors shadow-md shadow-sky-600/20"
                 >
                   <Download className="w-3.5 h-3.5" />

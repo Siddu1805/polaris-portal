@@ -135,7 +135,7 @@ export default function AdminPage() {
               {[
                 { event: 'NetCDF Ingest: Dronning Maud Land Ice Velocity (POL-DAT-2024-001)', time: '12 mins ago', status: 'Completed', user: 'Dr. Vikramaditya Sen' },
                 { event: 'DOI Assigned: Kongsfjorden Thermohaline IndARC Monograph', time: '1 hour ago', status: 'Published', user: 'Editorial Office' },
-                { event: 'Outreach Draft Submitted: Solar Panels on Antarctic Ice', time: '3 hours ago', status: 'Under Review', user: 'POLARIS Content Studio' },
+                { event: 'Outreach Draft Submitted: Solar Panels on Antarctic Ice', time: '3 hours ago', status: 'Under Review', user: 'POLARVISION Content Studio' },
                 { event: 'Aethalometer Calibration Record Replaced: Himadri Station', time: '1 day ago', status: 'Archived', user: 'Dr. Rajeshwar Nair' },
               ].map((tx, i) => (
                 <div key={i} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -330,7 +330,7 @@ export default function AdminPage() {
                   type="text"
                   value={formData.citation}
                   onChange={(e) => setFormData({ ...formData, citation: e.target.value })}
-                  placeholder="Author et al. (2024). POLARIS Science."
+                  placeholder="Author et al. (2024). POLARVISION Science."
                   className="w-full p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border"
                 />
               </div>

@@ -59,7 +59,7 @@ export function MobileDrawer({ isOpen, onClose, onOpenSearch }: MobileDrawerProp
               </div>
               <div>
                 <span className="font-extrabold text-lg tracking-wider text-slate-900 dark:text-white">
-                  POLARIS
+                  POLARVISION
                 </span>
                 <span className="block text-[9px] uppercase tracking-widest text-sky-600 dark:text-sky-400 font-semibold -mt-1">
                   Polar Knowledge Portal
@@ -120,7 +120,7 @@ export function MobileDrawer({ isOpen, onClose, onOpenSearch }: MobileDrawerProp
 
         {/* Footer info in Drawer */}
         <div className="pt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
-          <p className="font-semibold text-slate-700 dark:text-slate-300">POLARIS Portal</p>
+          <p className="font-semibold text-slate-700 dark:text-slate-300">POLARVISION Portal</p>
           <p className="text-[11px] mt-0.5">Scientific Exploration & Knowledge Network</p>
         </div>
       </div>

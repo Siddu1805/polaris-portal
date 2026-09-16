@@ -42,7 +42,7 @@ export function Navbar() {
               </div>
               <div className="flex flex-col">
                 <span className="font-black text-xl tracking-wider text-slate-900 dark:text-white leading-none">
-                  POLARIS
+                  POLARVISION
                 </span>
                 <span className="text-[10px] font-semibold tracking-widest text-sky-600 dark:text-sky-400 uppercase leading-tight mt-0.5">
                   Polar Science Portal

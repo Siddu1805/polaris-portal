@@ -1,5 +1,8 @@
 import { jsPDF } from 'jspdf';
-import { Expedition, ReportItem, DatasetItem, MediaItem } from '@/data/polaris-data';
+import { 
+  Expedition, ReportItem, DatasetItem, MediaItem, 
+  POLAR_DATASETS, POLAR_PUBLICATIONS 
+} from '@/data/polaris-data';
 
 /**
  * Universally triggers a file download in desktop and mobile browsers
@@ -22,7 +25,9 @@ export function triggerBlobDownload(blobOrContent: Blob | string, filename: stri
 
   // Cleanup after a short delay to support mobile Safari/WebKit
   setTimeout(() => {
-    document.body.removeChild(a);
+    if (a.parentNode) {
+      a.parentNode.removeChild(a);
+    }
     URL.revokeObjectURL(url);
   }, 2500);
 }
@@ -32,17 +37,17 @@ export function triggerBlobDownload(blobOrContent: Blob | string, filename: stri
  * in proper PDF format using jsPDF.
  *
  * Requirements:
- * - Filename format: expedition-name-report.pdf
+ * - Filename format: polarvision-expedition-name-report.pdf
  * - Clear headings, margins, readable fonts, and auto page breaks
  * - Comprehensive mission summary, objectives, milestones, personnel, and associated reports
  */
 export function downloadExpeditionReport(expedition: Expedition, associatedReports: ReportItem[] = []): string {
-  // Format filename strictly as expedition-name-report.pdf
+  // Format filename strictly as polarvision-[slug]-report.pdf
   const slug = expedition.name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
-  const filename = `${slug}-report.pdf`;
+  const filename = `polarvision-${slug}-report.pdf`;
 
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -67,7 +72,7 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(148, 163, 184);
-      doc.text('POLARIS Polar Science Portal — Official Mission Dossier', marginLeft, 13);
+      doc.text('POLARVISION Polar Science Portal — Official Expedition Report', marginLeft, 13);
       return true;
     }
     return false;
@@ -77,13 +82,13 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
   // 1. COVER HEADER BANNER
   // =========================================================================
   doc.setFillColor(10, 25, 47); // Navy-950
-  doc.roundedRect(marginLeft, y, contentWidth, 40, 2.5, 2.5, 'F');
+  doc.roundedRect(marginLeft, y, contentWidth, 42, 2.5, 2.5, 'F');
 
   // Classification Tag
   doc.setTextColor(56, 189, 248); // Sky-400
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
-  doc.text('POLARIS HIGH-LATITUDE SCIENCE REPOSITORY  •  PUBLIC OPEN ARCHIVE', marginLeft + 6, y + 8);
+  doc.text('POLARVISION HIGH-LATITUDE SCIENCE REPOSITORY  •  EXPEDITION REPORT', marginLeft + 6, y + 8);
 
   // Expedition Title
   doc.setTextColor(255, 255, 255);
@@ -98,12 +103,12 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(203, 213, 225);
   doc.text(
-    `Region: ${expedition.region}  |  Operational Window: ${expedition.duration}  |  Status: ${expedition.status}`,
+    `Year: ${expedition.year}  |  Region: ${expedition.region}  |  Duration: ${expedition.duration}  |  Status: ${expedition.status}`,
     marginLeft + 6,
-    y + 34
+    y + 35
   );
 
-  y += 46;
+  y += 48;
 
   // =========================================================================
   // 2. EXPEDITION METADATA CARD
@@ -298,13 +303,96 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
   }
 
   // =========================================================================
-  // 7. CITATION & ARCHIVE REPRODUCIBILITY
+  // 5. RELATED DATASETS
   // =========================================================================
-  checkPageBreak(25);
+  const relatedDatasets = POLAR_DATASETS.filter(
+    (d) => d.region.toLowerCase().includes(expedition.region.toLowerCase()) ||
+           expedition.region.toLowerCase().includes(d.region.toLowerCase())
+  ).slice(0, 3);
+
+  if (relatedDatasets.length > 0) {
+    checkPageBreak(30);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text(`5. RELATED OPEN DATASETS (${relatedDatasets.length})`, marginLeft, y);
+    y += 2;
+    doc.setDrawColor(14, 165, 233);
+    doc.line(marginLeft, y, marginLeft + contentWidth, y);
+    y += 5;
+
+    relatedDatasets.forEach((ds) => {
+      checkPageBreak(22);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(14, 165, 233);
+      doc.text(`• ${ds.code}: ${ds.title}`, marginLeft + 2, y, { maxWidth: contentWidth - 4 });
+      y += 4.5;
+
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 116, 139);
+      doc.text(
+        `Domain: ${ds.domain} | Parameter: ${ds.parameterName} (${ds.unit}) | Format: ${ds.format} | Size: ${ds.size}`,
+        marginLeft + 6,
+        y
+      );
+      y += 5;
+    });
+    y += 2;
+  }
+
+  // =========================================================================
+  // 6. RELATED SCIENTIFIC PUBLICATIONS
+  // =========================================================================
+  const relatedPublications = POLAR_PUBLICATIONS.filter(
+    (p) => p.relatedExpeditionId === expedition.id ||
+           p.region.toLowerCase().includes(expedition.region.toLowerCase()) ||
+           expedition.region.toLowerCase().includes(p.region.toLowerCase())
+  ).slice(0, 3);
+
+  if (relatedPublications.length > 0) {
+    checkPageBreak(30);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text(`6. RELATED SCIENTIFIC PUBLICATIONS (${relatedPublications.length})`, marginLeft, y);
+    y += 2;
+    doc.setDrawColor(14, 165, 233);
+    doc.line(marginLeft, y, marginLeft + contentWidth, y);
+    y += 5;
+
+    relatedPublications.forEach((pub) => {
+      checkPageBreak(24);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(15, 23, 42);
+      const titleLines = doc.splitTextToSize(`• "${pub.title}"`, contentWidth - 4);
+      doc.text(titleLines, marginLeft + 2, y);
+      y += titleLines.length * 4;
+
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 116, 139);
+      doc.text(
+        `${pub.authors.join(', ')} — ${pub.journal} (${pub.year}) | DOI: https://doi.org/${pub.doi}`,
+        marginLeft + 6,
+        y,
+        { maxWidth: contentWidth - 8 }
+      );
+      y += 5.5;
+    });
+    y += 2;
+  }
+
+  // =========================================================================
+  // 7. SOURCE INFORMATION & OFFICIAL ARCHIVE CITATION
+  // =========================================================================
+  checkPageBreak(30);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(15, 23, 42);
-  doc.text('5. OFFICIAL ARCHIVE CITATION', marginLeft, y);
+  doc.text('7. SOURCE INFORMATION & OFFICIAL CITATION', marginLeft, y);
   y += 2;
   doc.setDrawColor(14, 165, 233);
   doc.line(marginLeft, y, marginLeft + contentWidth, y);
@@ -313,9 +401,19 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(71, 85, 105);
-  const citationText = `${expedition.leadResearcher} et al. (${expedition.year}). Official Mission Record and Scientific Findings of the ${expedition.name} (${expedition.code}). POLARIS Polar Science Knowledge & Outreach Repository. Document ID: POL-EXP-${expedition.year}-${expedition.code.replace(/[^a-zA-Z0-9]/g, '')}.`;
+  const citationText = `${expedition.leadResearcher} et al. (${expedition.year}). Official Mission Record and Scientific Findings of the ${expedition.name} (${expedition.code}). POLARVISION Polar Science Knowledge & Outreach Repository. Document ID: POLARVISION-EXP-${expedition.year}-${expedition.code.replace(/[^a-zA-Z0-9]/g, '')}.`;
   const citationLines = doc.splitTextToSize(citationText, contentWidth);
   doc.text(citationLines, marginLeft, y);
+  y += citationLines.length * 4 + 3;
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(100, 116, 139);
+  doc.text(
+    'Source: POLARVISION High-Latitude Science Portal & Polar Research Repositories (Public Open Access Archive).',
+    marginLeft,
+    y
+  );
 
   // =========================================================================
   // 8. RUNNING FOOTER WITH PAGE NUMBERS ON ALL PAGES
@@ -326,7 +424,7 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(148, 163, 184);
-    doc.text('POLARIS Polar Science Portal — Verified Open-Access Scientific Dossier', marginLeft, 289);
+    doc.text('POLARVISION Polar Science Portal — Official Expedition Report', marginLeft, 289);
     doc.text(`Page ${p} of ${totalPages}`, marginLeft + contentWidth, 289, { align: 'right' });
   }
 
@@ -344,7 +442,7 @@ export function downloadExpeditionReport(expedition: Expedition, associatedRepor
  */
 export function downloadReportItem(report: ReportItem): string {
   const cleanCode = report.code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const filename = `${cleanCode}-report.pdf`;
+  const filename = `polarvision-${cleanCode}-report.pdf`;
 
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -368,7 +466,7 @@ export function downloadReportItem(report: ReportItem): string {
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(148, 163, 184);
-      doc.text('POLARIS Polar Science Knowledge Repository — Scientific Monograph', marginLeft, 13);
+      doc.text('POLARVISION Polar Science Knowledge Repository — Scientific Monograph', marginLeft, 13);
       return true;
     }
     return false;
@@ -381,7 +479,7 @@ export function downloadReportItem(report: ReportItem): string {
   doc.setTextColor(56, 189, 248);
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
-  doc.text(`POLARIS MONOGRAPH SERIES  •  ${report.category.toUpperCase()}`, marginLeft + 6, y + 8);
+  doc.text(`POLARVISION MONOGRAPH SERIES  •  ${report.category.toUpperCase()}`, marginLeft + 6, y + 8);
 
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(13);
@@ -517,7 +615,7 @@ export function downloadReportItem(report: ReportItem): string {
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(148, 163, 184);
-    doc.text('POLARIS Polar Science Knowledge Repository — Open-Access Monograph', marginLeft, 289);
+    doc.text('POLARVISION Polar Science Knowledge Repository — Open-Access Monograph', marginLeft, 289);
     doc.text(`Page ${p} of ${totalPages}`, marginLeft + contentWidth, 289, { align: 'right' });
   }
 
@@ -542,7 +640,7 @@ export function downloadDatasetPackage(dataset: DatasetItem): string {
 
   // Build CSV metadata headers
   const metaRows = [
-    `# POLARIS OPEN DATA ARCHIVE PACKAGE`,
+    `# POLARVISION OPEN DATA ARCHIVE PACKAGE`,
     `# Dataset Code: ${dataset.code}`,
     `# Title: ${dataset.title}`,
     `# Domain: ${dataset.domain}`,

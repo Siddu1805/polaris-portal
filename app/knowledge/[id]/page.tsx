@@ -56,7 +56,7 @@ export default function DocumentDetailPage() {
 
   const handleDownload = () => {
     const filename = downloadReportItem(report);
-    showToast('Download Complete', `Saved "${filename}" (${report.fileSize})`, 'success');
+    showToast('Report downloaded successfully', `Saved "${filename}"`, 'success');
   };
 
   return (
@@ -74,6 +74,7 @@ export default function DocumentDetailPage() {
 
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={() => {
               const added = toggleSave('report', report.id);
               showToast(added ? 'Saved to Profile' : 'Removed from Profile', report.title, 'info');
@@ -97,7 +98,11 @@ export default function DocumentDetailPage() {
           </Link>
 
           <button
-            onClick={handleDownload}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              handleDownload();
+            }}
             className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white shadow-sm flex items-center gap-1.5 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
@@ -287,7 +292,7 @@ export default function DocumentDetailPage() {
 {`@article{${report.id},
   title = {${report.title}},
   author = {${report.author} and others},
-  journal = {POLARIS Scientific Monographs},
+  journal = {POLARVISION Scientific Monographs},
   year = {${report.year}},
   doi = {${report.doi}}
 }`}

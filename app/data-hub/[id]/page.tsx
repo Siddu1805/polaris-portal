@@ -37,7 +37,7 @@ export default function DatasetDetailPage() {
 
   const handleDownload = () => {
     const filename = downloadDatasetPackage(dataset);
-    showToast('Download Complete', `Saved "${filename}" (${dataset.format}, ${dataset.size})`, 'success');
+    showToast('Report downloaded successfully', `Saved dataset package: "${filename}"`, 'success');
   };
 
   const handleCopyCitation = () => {
@@ -62,6 +62,7 @@ export default function DatasetDetailPage() {
 
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={() => {
               const added = toggleSave('dataset', dataset.id);
               showToast(added ? 'Saved Dataset' : 'Removed Dataset', dataset.title, 'info');
@@ -85,7 +86,11 @@ export default function DatasetDetailPage() {
           </Link>
 
           <button
-            onClick={handleDownload}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              handleDownload();
+            }}
             className="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white shadow-sm flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
